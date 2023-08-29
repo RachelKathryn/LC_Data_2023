@@ -29,7 +29,7 @@ SELECT * FROM staffuser.author_preferences -- 21 rows
 --Create tables with SELECT INTO
 DROP TABLE IF EXISTS staffuser.author_preferences;
 
--- SELECT * FROM staffuser.author_preferences; -- table is gone
+SELECT * FROM staffuser.author_preferences; -- table is gone
  
 SELECT DISTINCT author_id, genre_id INTO staffuser.author_preferences
 FROM staffuser.book;
@@ -42,7 +42,7 @@ SELECT * FROM staffuser.author_preferences; -- 21 rows
 
 --1
 
-SELECT * from staffuser.genre WHERE genres = 'Sky Pirates'
+SELECT * from staffuser.genre WHERE genres = 'Sky Pirates';
 
 INSERT INTO staffuser.genre (genre_id, genres)
 VALUES ((SELECT MAX(genre_id) FROM staffuser.genre)+1, N'Sky Pirates'); -- Why is there an N?
@@ -184,7 +184,7 @@ WHERE author_id < 5;
 
 UPDATE staffuser.author
 SET first_name = 'Billy', last_name = 'S.'
-WHERE author_id = 2;
+WHERE author_id <5;
 
 SELECT * 
 FROM staffuser.author

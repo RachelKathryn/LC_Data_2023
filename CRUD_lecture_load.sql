@@ -4,23 +4,25 @@ GO
 -- DROP ALL TABLES
 DROP TABLE IF EXISTS staffuser.author;
 DROP TABLE IF EXISTS staffuser.author_preferences;
-DROP TABLE IF EXISTS staffuser.book;
+-- DROP TABLE IF EXISTS staffuser.book;
 DROP TABLE IF EXISTS staffuser.genre;
 DROP TABLE IF EXISTS staffuser.patron;
 DROP TABLE IF EXISTS staffuser.some_patrons;
+DROP TABLE IF EXISTS staffuser.loan;
+DROP TABLE IF EXISTS staffuser.reference_books;
 
 ---
 
 DROP TABLE IF EXISTS JunkDB_STL_May2023.staffuser.author_preferences;
 
-DROP TABLE IF EXISTS JunkDB_STL_May2023.staffuser.book; -- You can only create a table once. If you try to create a table
+/* DROP TABLE IF EXISTS JunkDB_STL_May2023.staffuser.book; -- You can only create a table once. If you try to create a table
                                                         -- twice in the same script, your script will fail.  It's common practice
                                                         -- in many situations to write a DROP TABLE IF EXISTS statement into
                                                         -- your script to avoid this problem. You can also choose to comment out
                                                         -- statements like CREATE and INSERT after the first time you run them if you're
                                                         -- likely to run the script again.
 
-CREATE TABLE JunkDB_STL_May2023.staffuser.book (
+CREATE TABLE IF NOT EXISTS JunkDB_STL_May2023.staffuser.book (
     book_id INT IDENTITY(1,1) PRIMARY KEY, -- The IDENTITY syntax is as follows: IDENTITY(seed, increment).  
                                             -- We want to seed the first id number as 1 in this table and increment 
                                             -- by 1 for each following book_id.
@@ -68,7 +70,7 @@ VALUES (2, 'A Midsummers Night Dream', 978149413, 1, 23),
         (17, 'Beloved', 46736233, 1, 10),
         (18, 'Brassbones and Rainbows', 330608463, 1, 26);
 
--- SELECT * FROM staffuser.book
+-- SELECT * FROM staffuser.book */
 
 DROP TABLE IF EXISTS staffuser.author;
 
@@ -205,3 +207,32 @@ VALUES (1, 'Fantasy'),
 
 -- SELECT * FROM staffuser.genre
 
+DROP TABLE IF EXISTS JunkDB_STL_May2023.staffuser.loan;
+
+CREATE TABLE JunkDB_STL_May2023.staffuser.loan (
+    loan_id INT IDENTITY(1,1) PRIMARY KEY,
+    patron_id INT,
+    date_out DATE,
+    date_in DATE,
+    book_id INT
+    CONSTRAINT book_id FOREIGN KEY (book_id) REFERENCES JunkDB_STL_May2023.staffuser.book (book_id)
+        ON UPDATE SET NULL
+        ON DELETE SET NULL
+);
+
+-- SELECT * FROM staffuser.loan
+
+CREATE TABLE JunkDB_STL_May2023.staffuser.reference_books (
+    reference_id INT IDENTITY(1,1) PRIMARY KEY,
+    edition INT,
+    book_id INT FOREIGN KEY REFERENCES JunkDB_STL_May2023.staffuser.book(book_id)
+        ON UPDATE SET NULL
+        ON DELETE SET NULL
+);
+
+SELECT * from staffuser.reference_books;
+
+INSERT INTO JunkDB_STL_May2023.staffuser.reference_books (edition, book_id)
+    VALUES (5,32);
+
+SELECT * from staffuser.reference_books;
